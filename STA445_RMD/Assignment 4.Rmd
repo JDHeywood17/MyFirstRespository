@@ -1,0 +1,127 @@
+---
+title: "Assignment 4"
+author: "JD Heywood"
+date: "2026-10-19"
+output: pdf_document
+---
+
+1A.
+```{r}
+library(tidyverse)
+
+strings <- c('dab', 'crab', 'bad', 'BA')
+
+data.frame( string = strings ) %>%
+  mutate( result = str_detect(string, 'ab') )
+```
+This code is any string that has the sequence of 'ab'.
+
+1B.
+```{r}
+strings <- c('apple', 'boy', 'cat', 'cook')
+
+data.frame( string = strings ) %>%
+  mutate( result = str_detect(string, '[ab]') )
+```
+This code is any string that contains 'a' or 'b'
+
+1C.
+```{r}
+strings <- c('apple', 'banana', 'crab', 'dart')
+
+data.frame( string = strings ) %>%
+  mutate( result = str_detect(string, '^[ab]') )
+```
+This code is any string that starts with 'a' or 'b'
+
+1D.
+```{r}
+strings <- c('Room 234 A', '67 apples', '234A', 'A')
+
+data.frame( string = strings ) %>%
+  mutate( result = str_detect(string, '\\d+\\s[aA]') )
+```
+This code is any string that has digit(s) followed by a space then either an 'a' or an 'A'
+
+1E.
+```{r}
+strings <- c('Room 234 A', '234A', '67    apples', 'JD')
+
+data.frame( string = strings ) %>%
+  mutate( result = str_detect(string, '\\d+\\s*[aA]') )
+```
+This code is any string that has digit(s) followed by either an 'a' or an 'A' and can have none or any spaces in between
+
+1F.
+```{r}
+strings <- c('Hello  World', '123', '', 'JD!')
+
+data.frame( string = strings ) %>%
+  mutate( result = str_detect(string, '.*') )
+```
+This code is any string that doesnt have a space in it
+
+1G.
+```{r}
+strings <- c('JDbar', '12bar', 'fbar', 'barJD')
+
+data.frame( string = strings ) %>%
+  mutate( result = str_detect(string, '^\\w{2}bar') )
+```
+This code is any string that has 2 characters followed by the word 'bar'
+
+1H.
+```{r}
+strings <- c('my_foo.bar', '12bar', 'JDbar', 'bar')
+
+data.frame( string = strings ) %>%
+  mutate( result = str_detect(string, '(foo\\.bar)|(^\\w{2}bar)') )
+```
+This code is any string that contains "foo.bar" or 2 characters followed by the word 'bar'
+
+2.
+```{r}
+file.names <- c( 
+  'S123.P2.C10_20120621_213422.jpg',
+  'S10.P1.C1_20120622_050148.jpg',
+  'S187.P2.C2_20120702_023501.jpg'
+)
+
+pattern <- "^(S\\d+)\\.(P\\d+)\\.(C\\d+)_(\\d{4})(\\d{2})(\\d{2})_(\\d{2})(\\d{2})(\\d{2})\\.jpg$"
+
+df <- data.frame(file_name = file.names) %>%
+  extract(
+    col = file_name,
+    into = c("Site", "Plot", "Camera", "Year", "Month", "Day", "Hour", "Minute", "Second"),
+    regex = pattern
+  )
+
+df
+```
+
+3.
+```{r}
+library(stringr)
+
+Gettysburg <- 'Four score and seven years ago our fathers brought forth on this continent, a new nation, conceived in Liberty, and dedicated to the proposition that all men are created equal.Now we are engaged in a great civil war, testing whether that nation, or any nation so conceived and so dedicated, can long endure. We are met on a great battle-field of that war. We have come to dedicate a portion of that field, as a final resting place for those who here gave their lives that that nation might live. It is altogether fitting and proper that we should do this.But, in a larger sense, we can not dedicate -- we can not consecrate -- we can not hallow -- this ground. The brave men, living and dead, who struggled here, have consecrated it, far above our poor power to add or detract. The world will little note, nor long remember what we say here, but it can never forget what they did here. It is for us the living, rather, to be dedicated here to the unfinished work which they who fought here have thus far so nobly advanced. It is rather for us to be here dedicated to the great task remaining before us -- that from these honored dead we take increased devotion to that cause for which they gave the last full measure of devotion -- that we here highly resolve that these dead shall not have died in vain -- that this nation, under God, shall have a new birth of freedom -- and that government of the people, by the people, for the people, shall not perish from the earth.'
+
+words <- str_extract_all(Gettysburg, "[a-zA-Z]+(-[a-zA-Z]+)*")[[1]]
+
+mean_length <- mean(str_length(words))
+mean_length
+```
+
+4A.
+```{r}
+strings <- c('foo15', 'Bar', '.resid', '_14s', '99_Bottles', '.9Arggh', 'Foo!','HIV Rate')
+
+data.frame( string = strings ) %>%
+  mutate( result = str_detect(string, '^[a-zA-Z_][a-zA-Z0-9_.]*$' ))
+```
+
+4B.
+```{r}
+data.frame( string = strings ) %>%
+  mutate( result = str_detect(string, '^([a-zA-Z_]|\\.[a-zA-Z_])[a-zA-Z0-9_.]*$' ))
+```
+

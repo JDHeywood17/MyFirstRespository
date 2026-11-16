@@ -1,0 +1,130 @@
+---
+title: "Assignment 3"
+author: "JD Heywood"
+date: "2026-10-09"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r, Include = FALSE, message = FALSE, warning=FALSE}
+library(dplyr)
+library(ggplot2)
+library(microbenchmark)
+```
+
+
+#1.
+```{r}
+duniform <- function(x, a, b) {
+  if (x >= a & x <= b) {
+    return(1 / (b - a))
+  } else {
+    return(0)
+  }
+}
+
+duniform(x = 2, a = 4, b = 8)
+
+duniform(x = 6, a = 4, b = 8)
+
+duniform(x = 10, a = 4, b = 8)
+
+duniform <- function(x, a, b) {
+  output <- numeric(length(x)) # Pre-allocate output vector
+  for (i in 1:length(x)) {
+    if (x[i] >= a & x[i] <= b) {
+      output[i] <- 1 / (b - a)
+    } else {
+      output[i] <- 0
+    }
+  }
+  return(output)
+}
+
+data.frame(x = seq(-1, 12, by = .001)) %>%
+  mutate(y = duniform(x, 4, 8)) %>%
+  ggplot(aes(x = x, y = y)) +
+  geom_step()
+
+microbenchmark::microbenchmark(
+  duniform(seq(-4, 12, by = .0001), 4, 8),
+  times = 100
+)
+
+duniform <- function(x, a, b) {
+  ifelse(x >= a & x <= b, 1 / (b - a), 0)
+}
+
+data.frame(x = seq(-1, 12, by = .001)) %>%
+  mutate(y = duniform(x, 4, 8)) %>%
+  ggplot(aes(x = x, y = y)) +
+  geom_step()
+
+microbenchmark::microbenchmark(
+  duniform(seq(-4, 12, by = .0001), 4, 8),
+  times = 100
+)
+```
+Writing ifelse() was easier and resulted in fewer errors. Based on the microbenchmark results, ifelse() was also significantly faster, running with a median time of ~4.8 ms compared to ~32.5 ms for the for-loop.
+
+#2.
+```{r}
+duniform <- function(x, a = 0, b = 1) {
+  ifelse(x >= a & x <= b, 1 / (b - a), 0)
+}
+
+data.frame(x = seq(-0.5, 1.5, by = .001)) %>%
+  mutate(y = duniform(x)) %>%
+  ggplot(aes(x = x, y = y)) +
+  geom_step() +
+  labs(
+    title = "Uniform Density with Default Parameters (a = 0, b = 1)",
+    x = "x",
+    y = "Density"
+  )
+```
+
+#3.
+```{r}
+standardize <- function(x) {
+  (x - mean(x, na.rm = TRUE)) / sd(x, na.rm = TRUE)
+}
+
+data('iris')
+
+ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width, color = Species)) +
+  geom_point() +
+  labs(title = 'Pre-Transformation')
+
+iris.z <- iris %>% 
+  mutate(across(where(is.numeric), standardize))
+
+ggplot(iris.z, aes(x = Sepal.Length, y = Sepal.Width, color = Species)) +
+  geom_point() +
+  labs(title = 'Post-Transformation')
+```
+
+#4.
+```{r}
+fizzbuzz <- function(n) {
+  output <- character(n)
+  
+  for (i in 1:n) {
+    if (i %% 15 == 0) {
+      output[i] <- "Fizz-Buzz"
+    } else if (i %% 3 == 0) {
+      output[i] <- "Fizz"
+    } else if (i %% 5 == 0) {
+      output[i] <- "Buzz"
+    } else {
+      output[i] <- as.character(i)
+    }
+  }
+  
+  return(output)
+}
+
+fizzbuzz(15)
+```
+

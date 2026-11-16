@@ -1,0 +1,87 @@
+---
+title: "Assignment 6"
+author: "JD Heywood"
+date: "2026-11-04"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+1.
+```{r, warning=FALSE, message=FALSE}
+library(tidyverse)
+
+# a)
+Survey <- read.csv('https://www.lock5stat.com/datasets2e/StudentSurvey.csv', na.strings=c('',' '))
+
+# b)
+Survey1 <- Survey %>% 
+  select(Year, Gender)
+
+# c)
+Survey1$Year <- factor(Survey1$Year, levels = c("FirstYear", "Sophomore", "Junior", "Senior"))
+
+# d)
+Survey1$Gender <- factor(Survey1$Gender, levels = c("M", "F"), labels = c("Male", "Female"))
+
+# e)
+Survey_Data <- Survey1 %>% 
+  drop_na() %>% 
+  count(Gender, Year)
+
+# f)
+Survey_Table <- Survey_Data %>% 
+  pivot_wider(names_from = Year, values_from = n)
+
+Survey_Table
+```
+
+3.
+```{r, warning=FALSE}
+A <- tribble(
+  ~Name, ~Car,
+  'Alice', 'Ford F150',
+  'Bob',   'Tesla Model III',
+  'Charlie', 'VW Bug'
+)
+
+B <- tribble(
+  ~First.Name, ~Pet,
+  'Bob',  'Cat',
+  'Charlie', 'Dog',
+  'Alice', 'Rabbit'
+)
+
+# a)
+ab_joined <- inner_join(A, B, by = c("Name" = "First.Name"))
+ab_joined
+
+# b)
+B_new <- B %>% 
+  add_row(First.Name = "Alice", Pet = "Guinea pig")
+
+# c)
+ab_joined_4rows <- left_join(A, B_new, by = c("Name" = "First.Name"))
+ab_joined_4rows
+```
+
+
+4.
+```{r, Warning = FALSE}
+library(nycflights13)
+library(tidyverse)
+
+feb14_flights <- flights %>% 
+  filter(month == 2, day == 14) %>% 
+  inner_join(airlines, by = "carrier") %>% 
+  filter(name == "Virgin America") %>% 
+  select(carrier, dest, dep_time, air_time)
+
+flights_with_airports <- feb14_flights %>% 
+  left_join(airports, by = c("dest" = "faa"))
+
+flights_with_airports
+```
+
+
+

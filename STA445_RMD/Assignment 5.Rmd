@@ -1,0 +1,129 @@
+---
+title: "Assignment 5"
+author: "JD Heywood"
+date: "2026-10-23"
+output: pdf_document
+---
+
+1A.
+```{r}
+library(lubridate)
+mdy('September 13, 2010')
+```
+
+1B.
+```{r}
+mdy('Sept 13, 2010')
+```
+
+1C.
+```{r}
+mdy('Sep 13, 2010')
+```
+
+1D.
+```{r}
+mdy('S 13, 2010')
+```
+This code needs the abbreviation of 'Sep' to make this code work.
+
+1E.
+```{r}
+dmy('07-Dec-1941')
+```
+
+1F.
+```{r}
+mdy('1-5-1998')
+dmy('1-5-1998')
+
+```
+I could be wrong on this time because I do not know if its Janaury 5th, or May 1st, it could be either or and we do not know.
+
+1G.
+```{r}
+dmy('21-5-1998')
+
+```
+I know I am correct on this one because there is no month 21, so we know that it is May 21st, 1998.
+
+1H.
+```{r}
+ymd_hm('2020-May-5 10:30 am')
+```
+
+1I.
+```{r}
+ymd_hm('2020-May-5 10:30 am', tz='US/Pacific')
+```
+
+1J.
+```{r}
+ymd_hm('2020-May-5 10:30 am', tz='America/Puerto_Rico')
+```
+
+3.
+```{r}
+library(dplyr)
+dates <- c('2025-5-8 3:00pm', '2025-5-8 3:00pm')
+zones <- c('US/Arizona', 'Pacific/Auckland')
+
+data.frame(date=dates, zone=zones) %>%
+  rowwise() %>%
+  mutate(date = ymd_hm(date, tz=zone))
+```
+4.
+```{r, warning = FALSE}
+library(tidyverse)
+library(lubridate)
+
+weather <- read.csv("Pulliam_Airport_Weather_Station.csv")
+
+weather <- weather %>%
+  mutate(DATE = ymd(DATE))
+
+weather_5yrs <- weather %>%
+  filter(DATE >= max(DATE, na.rm = TRUE) - years(5))
+
+ggplot(weather_5yrs, aes(x = DATE, y = TMAX)) +
+  geom_line()
+
+```
+
+5A.
+```{r, warning = FALSE}
+library(mosaicData)
+
+data("Births78")
+births_clean <- Births78 %>% select(date, births)
+```
+
+5B.
+```{r}
+ggplot(births_clean, aes(x = date, y = births)) +
+  geom_point() +
+  labs(
+    title = "U.S. Births in 1978 by Date",
+    x = "Date",
+    y = "Number of Births"
+  )
+```
+I kind of see like 2 different trends in the graph, I am actually not sure why the data has this trend.
+
+5C.
+```{r}
+births_clean <- births_clean %>%
+  mutate(dow = wday(date, label = TRUE, abbr = FALSE))
+```
+
+5D.
+```{r}
+ggplot(births_clean, aes(x = date, y = births, color = dow)) +
+  geom_point() +
+  labs(
+    title = "U.S. Births in 1978 by Day of the Week",
+    x = "Date",
+    y = "Number of Births",
+    color = "Day of Week"
+  )
+```

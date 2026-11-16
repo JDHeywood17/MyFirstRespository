@@ -1,0 +1,35 @@
+---
+title: "Assignment 2"
+author: "JD Heywood"
+date: "2026-10-05"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r, warning=FALSE, message=FALSE}
+library(readxl)
+library(dplyr)
+```
+
+
+
+```{r}
+example5_df <- read_excel(path = "data-raw/Example_5.xls",sheet = "RawData",skip = 4)
+
+example5_df <- example5_df[, 1:3]
+
+str(example5_df)
+```
+
+```{r, warning=FALSE, message=FALSE}
+example3_df <- read_excel(path = "data-raw/Example_3.xls",sheet = "data",na = c("-9999", "NA"))
+
+example3_df <- example3_df[!is.na(example3_df$model), ]
+
+example3_df <- example3_df[, 1:11]
+
+tail(example3_df)
+```
+
+

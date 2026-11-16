@@ -1,0 +1,25 @@
+---
+title: "Assignment 7"
+author: "JD Heywood"
+date: "2026-11-13"
+output: pdf_document
+---
+
+```{r, message=FALSE, warning=FALSE}
+library(tidyverse)
+
+jaguars <- read_csv("jaguars.csv")
+
+ggplot(jaguars, aes(x = Wins, y = `Passer Rating`)) +
+  geom_point(color = "lightblue", size = 4) +
+  geom_text(aes(label = Year)) +
+  labs(
+    title = "Trevor Lawrence MVP Season",
+    subtitle = "Wins vs QBR",
+    x = "Wins",
+    y = "QBR"
+  ) +
+  theme_minimal()
+```
+Trevor Lawrence is having an MVP season, being top 5 in almost every passing stat. In his last 16 games, he has been taken out early in 8 of those games due to creating a huge lead against his opponentz. Playing the Titans this week, I am excited to watch Trevor Lawrence and the Jags put on a show and show why he deserves the MVP award this year.
+

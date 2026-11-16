@@ -1,0 +1,117 @@
+---
+title: "STA 445 Assignment 1"
+author: "JD Heywood"
+date: "2026-09-30"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+1. Create a vector of three elements (2,4,6) and name that vector vec_a. Create a second vector, vec_b, that contains  
+(8,10,12). Add these two vectors together and name the result vec_c.
+```{r}
+vec_a <- c(2, 4, 6)
+vec_b <- c(8, 10, 12)
+
+vec_c <- c(vec_a, vec_b)
+```
+
+2. Create a vector, named vec_d, that contains only two elements (14,20). Add this vector to vec_a. What is the result and what do you think R did (look up the recycling rule using Google)? What is the warning message that R gives you?
+```{r}
+vec_d <- c(14, 20)
+
+vec_d + vec_a
+```
+The result is 16, 24, 20. This is because vec_d is shorter than vec_a, so vec_d will recycle to the first element and will get added by the third element of vec_a. The warning message is "longer object length is not a multiple of shorter object lengths"
+
+3. Next add 5 to the vector vec_a. What is the result and what did R do? Why doesn’t in give you a warning message similar to what you saw in the previous problem?
+```{r}
+vec_a + 5
+```
+The result is 7, 9, 11, R added 5 to every element in the vector and didnt give me an error message because its just a single number getting added to each element of the array instead of adding multiple numbers of a vector to another multiple numbers of vector(where the vector sizes are different)
+
+5.Generate the vector of even numbers {2, 4, 6, … , 20}
+a) Using the seq() function and
+b) Using the a:b shortcut and some subsequent algebra. Hint: Generate a sequence of integers then multiple by 2.
+```{r}
+seq(from = 2, to = 20, by = 2)
+
+1:10 * 2
+```
+
+6.Generate a vector of  21 elements that are evenly placed between 0 and 1 using the seq() command and name this vector x.
+```{r}
+x <- seq(from = 0, to = 1, length.out = 21)
+x
+```
+
+8.Generate the vector {2,2,2,2,4,4,4,4,8,8,8,8} using the rep() command. You might need to check the help file for rep(). In particular, look at the optional argument each=.
+```{r}
+rep(c(2, 4, 8), each = 4)
+```
+
+11.a) Create a data.frame named my.trees that has the following columns:
+Girth = {8.3, 8.6, 8.8, 10.5, 10.7, 10.8, 11.0}
+Height= {70, 65, 63, 72, 81, 83, 66}
+Volume= {10.3, 10.3, 10.2, 16.4, 18.8, 19.7, 15.6}
+
+Complete the following without using dplyr functions
+
+b) Extract the third observation (i.e. the third row)
+c) Extract the Girth column referring to it by name (don’t use a numerical value based on column position).
+d) Print out a data frame of all the observations except for the fourth observation. (i.e. Remove the fourth observation/row.)
+e) Use the which() command to create a vector of row indices that have a girth greater than 10. Call that vector index.
+f) Use the index vector to create a small data set with just the large girth trees.
+g) Use the index vector to create a small data set with just the small girth trees.
+```{r}
+my.trees <- data.frame(
+  Girth = c(8.3, 8.6, 8.8, 10.5, 10.7, 10.8, 11.0),
+  Height = c(70, 65, 63, 72, 81, 83, 66),
+  Volume = c(10.3, 10.3, 10.2, 16.4, 18.8, 19.7, 15.6)
+)
+
+my.trees[3, ]
+
+my.trees$Girth
+
+my.trees[-4, ]
+
+index <- which(my.trees$Girth > 10)
+
+my.trees[index, ]
+
+my.trees[-index, ]
+```
+
+12.The following code creates a data.frame and then has two different methods for removing the rows with NA values in the column Grade. Explain the difference between the two.
+```{r}
+df <- data.frame(name= c('Alice','Bob','Charlie','Daniel'),
+                 Grade = c(6,8,NA,9))
+
+df[ -which(  is.na(df$Grade) ), ]
+df[  which( !is.na(df$Grade) ), ]
+```
+The method using df[ -which(is.na(df$Grade)),] finds where values are NA and keeps them where the other method of df[ which(!is.na(df$Grade)),] finds where values are not NA, and then keeps those values and gets rid of the other ones. So overall they both remove rows with NA values but one finds the NA values and removes them, and one of them finds values that are not NA and removes everything else.
+
+14.Create and manipulate a list.
+a) Create a list named my.test with elements
+x = c(4,5,6,7,8,9,10)
+y = c(34,35,41,40,45,47,51)
+slope = 2.82
+p.value = 0.000131
+
+b) Extract the second element in the list.
+c) Extract the element named p.value from the list.
+```{r}
+my.test <- list(
+  x = c(4, 5, 6, 7, 8, 9, 10),
+  y = c(34, 35, 41, 40, 45, 47, 51),
+  slope = 2.82,
+  p.value = 0.000131
+)
+
+my.test[[2]]
+
+my.test$p.value
+```
+
